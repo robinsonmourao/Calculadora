@@ -10,10 +10,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
-import javax.swing.event.ChangeListener;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;//Associa o atalho somente apos iniciar a aplicação
 
 import javafx.application.Platform;//Acesso aos codigos das teclas
+
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;//Criação de combinaçoes de teclas
 import javafx.scene.input.KeyCombination;//Acesso aos codigos de teclas com ctrl
 
@@ -77,24 +79,21 @@ public class Controller {
     	
     	//listener para slider
     	percentSlider.valueProperty().addListener(
-    		new ChangeListener<Number>()){    		
+    			new ChangeListener<Number>(){
     			@Override
-    				public void changed(ObservevableValue<? extends Number> observableValue, Number valorAntigo, Number valorNovo){
-    				gorjetaPercent = BigDecimal.valueOf(valorNovo.intValue()/100.0);
-    				percentLabel.setText(percent.format(gorjetaPercent));
-    			
-    		
+    			public void changed(ObservableValue<? extends Number> ov,Number valorAntigo, Number valorNovo) {
+    			gorjetaPercent = BigDecimal.valueOf(valorNovo.intValue()/100.0);
+    			percentLabel.setText(percent.format(gorjetaPercent));
+    			}
     		}
+    		);
+    	Platform.runLater(() -> {
+    		calcularButton.getScene().getAccelerators().put
+    		(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
+    				calcularButton.fire();
+    	});
     	
-    	}
-    	
-    }
-    Plataform.runLater(() -> {
-    	calculatButton.getScene().getAccelerators().put
-    	(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
-    			calcularButton.fire();
-    	}
-    	
+    });
     }
 
 }
