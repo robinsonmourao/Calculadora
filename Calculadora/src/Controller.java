@@ -5,6 +5,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -56,7 +57,7 @@ public class Controller {
 	private TextField inputNumerosTextField;
 
 	@FXML
-	private Text insiraNumerosText;
+	private Slider percentSlider;
 
 	@FXML
 	private Button minusButton;
@@ -90,59 +91,81 @@ public class Controller {
 
 	@FXML
 	private Button zeroButton;	
-    
+
 	//cria "moeda" com padroes da regiao do sistema
-    private static final NumberFormat moeda = NumberFormat.getPercentInstance(); 
-    //cria "percent" com padroes da regiao do sistema
-    private static final NumberFormat percent = NumberFormat.getPercentInstance();
-    //cria "valorTotal" e inicia como um bigdecimal
-    private BigDecimal valorTotal = new BigDecimal(0);
-    
-    
-    @FXML
-    //ação do botão calcularButton
-    void calcularEvent(ActionEvent event) {
-    	try {
-    		//cria "valor", inicia-o como BigDecimal e o associa com o valor de "inputNumerosTextField"
-    		BigDecimal valor = new BigDecimal(inputNumerosTextField.getText());
-    		
-    		//cria "valorParcial" e multiplica "valor" por "valorTotal"
-    		BigDecimal valorParcial = valor.multiply(valorTotal);
-    		
-    		//cria "total" e associa a aos (somatório de "valorTotal" com "valor") 
-    		BigDecimal total = valor.add(valorTotal);
-    		
-    		//formata "total" de moeda e o poe em "calcularTextField"
-    		calcularTextField.setText(moeda.format(total));
-    	}
-    	catch( NumberFormatException ex){
-    		inputNumerosTextField.setText("Entre a quantia");
-    		inputNumerosTextField.selectAll();
-    		inputNumerosTextField.requestFocus();
-    		    		
-    	}
-    }
-    public void initialize() {//arredonda para baixo de 0 a 4 e para cima de 5 a 9
-    	
-    	moeda.setRoundingMode(RoundingMode.HALF_UP);
-    	
-    	//listener para slider
-    	percentSlider.valueProperty().addListener(
-    			new ChangeListener<Number>(){
-    			@Override
-    			public void changed(ObservableValue<? extends Number> ov,Number valorAntigo, Number valorNovo) {
-    			gorjetaPercent = BigDecimal.valueOf(valorNovo.intValue()/100.0);
-    			percentLabel.setText(percent.format(gorjetaPercent));
-    			}
-    		}
-    		);
-    	Platform.runLater(() -> {
-    		calcularButton.getScene().getAccelerators().put
-    		(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
-    				calcularButton.fire();
-    	});
-    	
-    });
-    }
+	private static final NumberFormat moeda = NumberFormat.getPercentInstance(); 
+	//cria "percent" com padroes da regiao do sistema
+	private static final NumberFormat percent = NumberFormat.getPercentInstance();
+
+	BigDecimal valorInput, valorParcial = new BigDecimal(0), valorTotal = new BigDecimal(0);
+	
+	@FXML
+	//ação do botão calcularButton	
+	void calcularEvent(ActionEvent event) {
+		try {
+			//Pega o valor do input: "inputNumerosTextField" e salva na variável "valorInput"
+			valorInput = new BigDecimal(inputNumerosTextField.getText());
+
+			//Pega o "valorTotal" multiplica por "valorInput" e salva a variável "valorParcial"
+			valorParcial = valorInput.multiply(valorTotal);
+
+			//Pega o valor de "valorInput" e adiciona em "valorParcial" e salva em "valorTotal"
+			valorTotal = valorParcial.add(valorInput);
+
+			//formata "total" de moeda e o poe em "calcularTextField"
+			calcularTextField.setText(moeda.format(valorTotal));
+		}
+		catch( NumberFormatException ex){
+			inputNumerosTextField.setText("Nenhum número informado:");
+			inputNumerosTextField.selectAll();
+			inputNumerosTextField.requestFocus();
+
+		}
+		
+	}
+	public void initialize() {
+		
+		//evento do botão 1
+		oneButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent evento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+1);
+			}
+		});
+
+		//evento dos numeros sao todos iguals, ou enxute para ficar um metodo so masi inteligente
+		
+		plusButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent evento) {
+				//pega o texto do "inputNumerosTextField", converte para BigDecimal e salva em "valorParcial"
+				//TEM QUE CONVERTER PRA BIGDECIMAL
+				//valorParcial = BigDecimal.parseBigDecimal(inputNumerosTextField.getText());
+			}
+		});
+		
+		//arredonda para baixo de 0 a 4 e para cima de 5 a 9    	
+		moeda.setRoundingMode(RoundingMode.HALF_UP);
+
+		//listener para slider, calcular os %
+		percentSlider.valueProperty().addListener(
+				new ChangeListener<Number>(){
+					@Override
+					public void changed(ObservableValue<? extends Number> ov,Number valorAntigo, Number valorNovo) {
+
+						//
+						valorTotal = BigDecimal.valueOf(valorNovo.intValue()/100.0);
+
+						//Altera "calcularTextField" para a porcentagem de "gorgetaPercent"
+						calcularTextField.setText(percent.format(valorParcial));
+					}
+				}
+				);
+		Platform.runLater(() -> {
+			calcularButton.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
+				calcularButton.fire();
+			});
+
+		});
+
+	}
 
 }
