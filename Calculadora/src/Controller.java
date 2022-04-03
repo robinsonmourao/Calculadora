@@ -19,62 +19,111 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;//Criação de combinaçoes de teclas
 import javafx.scene.input.KeyCombination;//Acesso aos codigos de teclas com ctrl
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+
 public class Controller {
 
-    @FXML
-    private Label totalLabel;
+	@FXML
+	private Button calcularButton;
 
-    @FXML
-    private GridPane mainGrindPane;
+	@FXML
+	private TextField calcularTextField;
 
-    @FXML
-    private Button calcularButton;
+	@FXML
+	private Button clearButton;
 
-    @FXML
-    private Slider percentSlider;
+	@FXML
+	private Button divideButton;
 
-    @FXML
-    private TextField quantiaTextField;
+	@FXML
+	private Button eightButton;
 
-    @FXML
-    private Label gorjetaLabel;
+	@FXML
+	private Button fiveButton;
 
-    @FXML
-    private TextField gorjetaTextField;
+	@FXML
+	private Button fourButton;
 
-    @FXML
-    private Label quantiaLabel;
+	@FXML
+	private GridPane gridPane;
 
-    @FXML
-    private Label percentLabel;
+	@FXML
+	private TextField inputNumerosTextField;
 
-    @FXML
-    private TextField totalTextField;
+	@FXML
+	private Text insiraNumerosText;
 
-    @FXML
+	@FXML
+	private Button minusButton;
+
+	@FXML
+	private Button nineButton;
+
+	@FXML
+	private Button oneButton;
+
+	@FXML
+	private Button percentButton;
+
+	@FXML
+	private Button plusButton;
+
+	@FXML
+	private Button sevenButton;
+
+	@FXML
+	private Button sixButton;
+
+	@FXML
+	private Button threeButton;
+
+	@FXML
+	private Button timesButton;
+
+	@FXML
+	private Button twoButton;
+
+	@FXML
+	private Button zeroButton;	
     
-    private static final NumberFormat moeda = NumberFormat.getPercentInstance();
+	//cria "moeda" com padroes da regiao do sistema
+    private static final NumberFormat moeda = NumberFormat.getPercentInstance(); 
+    //cria "percent" com padroes da regiao do sistema
     private static final NumberFormat percent = NumberFormat.getPercentInstance();
-    private BigDecimal gorjetaPercent = new BigDecimal(0.10);
+    //cria "valorTotal" e inicia como um bigdecimal
+    private BigDecimal valorTotal = new BigDecimal(0);
     
+    
+    @FXML
+    //ação do botão calcularButton
     void calcularEvent(ActionEvent event) {
     	try {
-    		BigDecimal valor = new BigDecimal(quantiaTextField.getText());
-    		BigDecimal gorjeta = valor.multiply(gorjetaPercent);
-    		BigDecimal total = valor.add(gorjeta);
+    		//cria "valor", inicia-o como BigDecimal e o associa com o valor de "inputNumerosTextField"
+    		BigDecimal valor = new BigDecimal(inputNumerosTextField.getText());
     		
-    		gorjetaTextField.setText(moeda.format(gorjeta));
-    		totalTextField.setText(moeda.format(total));
+    		//cria "valorParcial" e multiplica "valor" por "valorTotal"
+    		BigDecimal valorParcial = valor.multiply(valorTotal);
+    		
+    		//cria "total" e associa a aos (somatório de "valorTotal" com "valor") 
+    		BigDecimal total = valor.add(valorTotal);
+    		
+    		//formata "total" de moeda e o poe em "calcularTextField"
+    		calcularTextField.setText(moeda.format(total));
     	}
     	catch( NumberFormatException ex){
-    		quantiaTextField.setText("Entre a quantia");
-    		quantiaTextField.selectAll();
-    		quantiaTextField.requestFocus();
+    		inputNumerosTextField.setText("Entre a quantia");
+    		inputNumerosTextField.selectAll();
+    		inputNumerosTextField.requestFocus();
     		    		
     	}
     }
-    public void initialize() {
-    	//arredonda para baixo de 0 a 4 e para cima de 5 a 9
+    public void initialize() {//arredonda para baixo de 0 a 4 e para cima de 5 a 9
+    	
     	moeda.setRoundingMode(RoundingMode.HALF_UP);
     	
     	//listener para slider
