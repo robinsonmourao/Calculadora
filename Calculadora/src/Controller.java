@@ -1,3 +1,5 @@
+
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -123,12 +126,26 @@ public class Controller {
 		}
 		
 	}
-	//reaprender
-	//1try cath
-	//2interface
+	//o sistema vai me mandar um valor String e eu vou somar com o da caixa de texto em forma de bigdecimal
+	public String soma(String valorString) {
+		
+		BigDecimal  valorBigDecimal, valorAtual = new BigDecimal(inputNumerosTextField.getText());
+		String valorParcialString = null;
+		
+		//Converte o valor string da entrada e coverte para valor bigdecimal
+		valorBigDecimal = new BigDecimal(valorString);		
+		
+		valorParcial = valorAtual.add(valorBigDecimal);
+		System.out.println(valorParcial);
+		
+		//Converte o valor de string de volta para bigdecimal
+		valorParcialString = String.valueOf(valorParcial);		
+		return valorParcialString;
+		
+	}
 	
 	public void initialize() {
-		//evento dos botões da tela de inpút
+		//evento dos botões da tela de input
 		oneButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent numeroEvento) {
 				inputNumerosTextField.setText(inputNumerosTextField.getText()+1);
@@ -178,12 +195,16 @@ public class Controller {
 		//Eventos de operação
 		plusButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent operacaoEvento) {
-				BigDecimal valorParcial;
-				String numeroAnterior = inputNumerosTextField.getText();
+				soma(inputNumerosTextField.getText());
 				
-				//pega o texto do "inputNumerosTextField", converte para BigDecimal e salva em "valorParcial"
-				//TEM QUE CONVERTER PRA BIGDECIMAL
-				//valorParcial = BigDecimal.parseBigDecimal(inputNumerosTextField.getText());
+			}
+			
+		});
+		
+		//Botão clear
+		clearButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent clearEvent) {
+				inputNumerosTextField.setText("");
 			}
 		});
 		
@@ -191,7 +212,7 @@ public class Controller {
 		moeda.setRoundingMode(RoundingMode.HALF_UP);
 
 		//listener para slider, calcular os %
-		percentSlider.valueProperty().addListener(
+		/*percentSlider.valueProperty().addListener(
 				new ChangeListener<Number>(){
 					@Override
 					public void changed(ObservableValue<? extends Number> ov,Number valorAntigo, Number valorNovo) {
@@ -203,7 +224,7 @@ public class Controller {
 						calcularTextField.setText(percent.format(valorParcial));
 					}
 				}
-				);
+				);*/
 		Platform.runLater(() -> {
 			calcularButton.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
 				calcularButton.fire();
