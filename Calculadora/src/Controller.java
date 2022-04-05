@@ -123,19 +123,64 @@ public class Controller {
 		}
 		
 	}
+	//reaprender
+	//1try cath
+	//2interface
+	
 	public void initialize() {
-		
-		//evento do botão 1
+		//evento dos botões da tela de inpút
 		oneButton.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent evento) {
+			public void handle(ActionEvent numeroEvento) {
 				inputNumerosTextField.setText(inputNumerosTextField.getText()+1);
 			}
 		});
-
-		//evento dos numeros sao todos iguals, ou enxute para ficar um metodo so masi inteligente
-		
+		twoButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+2);
+			}
+		});
+		threeButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+3);
+			}
+		});
+		fourButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+4);
+			}
+		});
+		fiveButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+5);
+			}
+		});
+		sixButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+6);
+			}
+		});
+		sevenButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+7);
+			}
+		});
+		eightButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+8);
+			}
+		});
+		nineButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent numeroEvento) {
+				inputNumerosTextField.setText(inputNumerosTextField.getText()+9);
+			}
+		});
+			
+		//Eventos de operação
 		plusButton.setOnAction(new EventHandler<ActionEvent>(){
-			public void handle(ActionEvent evento) {
+			public void handle(ActionEvent operacaoEvento) {
+				BigDecimal valorParcial;
+				String numeroAnterior = inputNumerosTextField.getText();
+				
 				//pega o texto do "inputNumerosTextField", converte para BigDecimal e salva em "valorParcial"
 				//TEM QUE CONVERTER PRA BIGDECIMAL
 				//valorParcial = BigDecimal.parseBigDecimal(inputNumerosTextField.getText());
