@@ -98,13 +98,14 @@ public class Controller {
 	//cria "moeda" com padroes da regiao do sistema
 	private static final NumberFormat moeda = NumberFormat.getPercentInstance(); 
 	//cria "percent" com padroes da regiao do sistema
-	private static final NumberFormat percent = NumberFormat.getPercentInstance();
-
+	private static final NumberFormat percent = NumberFormat.getPercentInstance();	
+	
 	BigDecimal valorInput, valorParcial = new BigDecimal(0), valorTotal = new BigDecimal(0);
 	
 	@FXML
 	//ação do botão calcularButton	
 	void calcularEvent(ActionEvent event) {
+		
 		try {
 			//Pega o valor do input: "inputNumerosTextField" e salva na variável "valorInput"
 			valorInput = new BigDecimal(inputNumerosTextField.getText());
@@ -127,20 +128,18 @@ public class Controller {
 		
 	}
 	//o sistema vai me mandar um valor String e eu vou somar com o da caixa de texto em forma de bigdecimal
-	public String soma(String valorString) {
+	public void soma(String valorEntrada) {
 		
-		BigDecimal  valorBigDecimal, valorAtual = new BigDecimal(inputNumerosTextField.getText());
-		String valorParcialString = null;
+		BigDecimal  
+		//Converte o valor da tela para bigdecimal
+		valorAnteriorBigDecimal = new BigDecimal(inputNumerosTextField.getText()),
+		//Converte o valor string da entrada para valor bigdecimal		
+		valorEntradaBigDecimal = new BigDecimal(valorEntrada);		
 		
-		//Converte o valor string da entrada e coverte para valor bigdecimal
-		valorBigDecimal = new BigDecimal(valorString);		
+		valorParcial = valorAnteriorBigDecimal.add(valorEntradaBigDecimal);
+		String valorParcialString = String.valueOf(valorParcial);
 		
-		valorParcial = valorAtual.add(valorBigDecimal);
-		System.out.println(valorParcial);
-		
-		//Converte o valor de string de volta para bigdecimal
-		valorParcialString = String.valueOf(valorParcial);		
-		return valorParcialString;
+		inputNumerosTextField.setText(inputNumerosTextField.getText() + " + " + " = " + valorParcialString);
 		
 	}
 	
@@ -206,27 +205,23 @@ public class Controller {
 			public void handle(ActionEvent clearEvent) {
 				inputNumerosTextField.setText("");
 			}
+			
+		});
+		
+		calcularButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent calculaEvento) {
+				//por enquanto n faz nada
+				inputNumerosTextField.getText();
+			}
+			
 		});
 		
 		//arredonda para baixo de 0 a 4 e para cima de 5 a 9    	
-		moeda.setRoundingMode(RoundingMode.HALF_UP);
-
-		//listener para slider, calcular os %
-		/*percentSlider.valueProperty().addListener(
-				new ChangeListener<Number>(){
-					@Override
-					public void changed(ObservableValue<? extends Number> ov,Number valorAntigo, Number valorNovo) {
-
-						//
-						valorTotal = BigDecimal.valueOf(valorNovo.intValue()/100.0);
-
-						//Altera "calcularTextField" para a porcentagem de "gorgetaPercent"
-						calcularTextField.setText(percent.format(valorParcial));
-					}
-				}
-				);*/
+		//moeda.setRoundingMode(RoundingMode.HALF_UP);
+		
 		Platform.runLater(() -> {
-			calcularButton.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
+			calcularButton.getScene().getAccelerators().put
+			(new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN),() -> {
 				calcularButton.fire();
 			});
 
